@@ -1,8 +1,14 @@
+# -*- coding: utf-8 -*-
+
 #create database for registered people and their emails and phone numbers   
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from google.cloud import bigquery
 import requests 
 import json 
+import os
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/vize/Desktop/Semestre_8/myenv/Colmena_Start/colmena-386419-8c8c1d805f37.json"
 
 
 app = Flask(__name__)
@@ -41,11 +47,27 @@ def submit():
         db.session.add(new_registro)
         db.session.commit()
 
-        # Redirect the user to a page that tells them that they have been registered successfully
+         #insert the data into BigQuery
+        try:
+            client = bigquery.Client()
+            table_id = "colmena-386419.Registros.Nuevos1" #table id of the table in BigQuery
+            
+            rows_to_insert = [
+                {"id":new_registro.id,"email": email, "phone_number": phone},
+            ]
 
+            errors = client.insert_rows_json(table_id, rows_to_insert)  # Make an API request.
+            if errors == []:
+                print("New rows have been added.")
+            else:
+                print("Encountered errors while inserting rows: {}".format(errors))
+        except Exception as e:
+            print(e)
+
+        #redirect the user to a page that tells them that they have been registered successfully
         return redirect(url_for('thank_you'))
+        # Redirect the user to a page that tells them that they have been registered successfully
         
-
 @app.route('/thank_you') #redirección al html de thank you para los nuevos usuarios 
 def thank_you():
     return render_template('thank_you.html')
