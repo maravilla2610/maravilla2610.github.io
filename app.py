@@ -10,19 +10,16 @@ import os
 import base64
 import tempfile 
 
+# Get the Google Cloud credentials from the environment variable
+credentials = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
 
-encoded_key = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
-
-# Decode the key
-key = json.loads(base64.b64decode(encoded_key).decode())
-
-# Write the key to a temporary file
-with tempfile.NamedTemporaryFile(mode="w", delete=False) as temp_key_file:
-    json.dump(key, temp_key_file)
-    temp_key_file_path = temp_key_file.name
-
-# Set the environment variable to the path of the temporary file
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_key_file_path
+# If the credentials are not None, create a new temporary file and write the credentials to it
+if credentials is not None:
+    credentials_dict = json.loads(credentials)
+    _, path = tempfile.mkstemp()
+    with open(path, 'w') as file:
+        json.dump(credentials_dict, file)
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///registros.db"
