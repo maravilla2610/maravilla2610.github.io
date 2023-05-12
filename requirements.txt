@@ -2,4 +2,8 @@ web: gunicorn app:app
 flask
 flask_sqlalchemy
 google-cloud-bigquery
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
 gunicorn
+
