@@ -49,7 +49,7 @@ class Registro(db.Model):
     __tablename__ = 'registro'
     id = db.Column(db.Integer, primary_key=True) #
     email = db.Column(db.String(100), nullable=False)
-    phone_number = db.Column(db.Integer, nullable=False)
+    phone_number = db.Column(db.BigInteger, nullable=False)
     
 with app.app_context():
     db.create_all()
