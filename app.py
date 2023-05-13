@@ -28,7 +28,7 @@ if credentials is not None:
 
 client = bigquery.Client()  # This should now use the service account key file specified by the 'GOOGLE_APPLICATION_CREDENTIALS' environment variable
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 # Check if we are running on Heroku
 if os.getenv('DATABASE_URL') is None:
