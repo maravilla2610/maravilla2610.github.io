@@ -29,7 +29,15 @@ if credentials is not None:
 client = bigquery.Client()  # This should now use the service account key file specified by the 'GOOGLE_APPLICATION_CREDENTIALS' environment variable
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///registros.db"
+
+# Check if we are running on Heroku
+if os.getenv('DATABASE_URL') is None:
+    # We are running on a local machine
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///registros.db"
+else:
+    # We are running on Heroku
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL')
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db=SQLAlchemy(app) # initialize the database connection
@@ -40,6 +48,10 @@ class Registro(db.Model):
     id = db.Column(db.Integer, primary_key=True) #
     email = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.Integer, nullable=False)
+    
+with app.app_context():
+    db.create_all()
+
 
 @app.route('/')
 def index():
