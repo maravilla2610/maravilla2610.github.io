@@ -46,10 +46,11 @@ db=SQLAlchemy(app) # initialize the database connection
 
 #create a data base for the phone number and email of the registered people 
 class Registro(db.Model):
-    __tablename__ = 'registro'
+    __tablename__ = 'registros1'
     id = db.Column(db.Integer, primary_key=True) #
     email = db.Column(db.String(100), nullable=False)
-    phone_number = db.Column(db.BigInteger, nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)  # Change the column type to string
+
     
 with app.app_context():
     db.create_all()
