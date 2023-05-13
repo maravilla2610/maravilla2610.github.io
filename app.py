@@ -38,7 +38,7 @@ if os.getenv('DATABASE_URL') is None:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///registros.db"
 else:
     # We are running on Heroku
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL')
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL').replace("://", "ql://", 1)
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
