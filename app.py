@@ -9,17 +9,14 @@ import json
 import os
 import base64
 import tempfile 
+from google.oauth2.service_account import Credentials
 
 # Get the Google Cloud credentials from the environment variable
-credentials = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
 
-# If the credentials are not None, create a new temporary file and write the credentials to it
-if credentials is not None:
-    credentials_dict = json.loads(credentials)
-    _, path = tempfile.mkstemp()
-    with open(path, 'w') as file:
-        json.dump(credentials_dict, file)
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path
+service_account_info = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
+credentials = Credentials.from_service_account_info(service_account_info)
+
+client = bigquery.Client(credentials=credentials)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///registros.db"
