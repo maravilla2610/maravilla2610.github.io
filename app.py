@@ -35,7 +35,7 @@ app = Flask(__name__, template_folder='templates')
 # Check if we are running on Heroku
 if os.getenv('DATABASE_URL') is None:
     # We are running on a local machine
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///registros.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///registros1.db"
 else:
     # We are running on Heroku
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL').replace("://", "ql://", 1)
