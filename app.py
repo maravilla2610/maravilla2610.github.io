@@ -11,6 +11,8 @@ import base64
 import tempfile 
 from google.oauth2.service_account import Credentials
 import logging
+from sqlalchemy.dialects import postgresql
+
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
