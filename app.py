@@ -10,6 +10,11 @@ import os
 import base64
 import tempfile 
 from google.oauth2.service_account import Credentials
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
 
 # Get the Google Cloud credentials from the environment variable
 
@@ -46,6 +51,10 @@ def submit():
     # Store input values in variables
     email = request.form['email']
     phone = request.form['phone']
+    
+    if not email or not phone:
+        logging.error('Email or phone not provided')
+        return redirect(url_for('error'))
 
    # Check if the user has already registered
     registro = Registro.query.filter_by(email=email, phone_number=phone).first() # check if the user has already registered in the database
@@ -86,6 +95,9 @@ def thank_you():
 @app.route('/already_registered') #redirect to the html of already registered for the users that are already registered
 def already_registered():   
     return render_template('already_registered.html')
+@app.route('/error')
+def error():
+    return render_template('error.html')
 
 
 if __name__ == '__main__':
