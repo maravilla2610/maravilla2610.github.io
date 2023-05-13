@@ -64,7 +64,7 @@ def index():
 def submit():
     # Store input values in variables
     email = request.form['email']
-    phone = request.form['phone']
+    phone = str(request.form['phone'])
     
     if not email or not phone:
         logging.error('Email or phone not provided')
